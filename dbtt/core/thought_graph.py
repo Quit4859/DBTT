@@ -11,7 +11,7 @@ from typing import Any
 
 import networkx as nx
 
-from dbtt.core.config import settings
+from dbtt.core.constants import MAX_THOUGHTS
 from dbtt.models.thought import Thought
 
 
@@ -20,9 +20,10 @@ class ThoughtGraph:
 
     def __init__(self) -> None:
         self._graph = nx.DiGraph()
+        self.thoughts: dict[str, Thought] = {}
 
     def _check_limits(self) -> None:
-        if self._graph.number_of_nodes() > settings.thought_graph_max_nodes:
+        if self._graph.number_of_nodes() > MAX_THOUGHTS:
             raise RuntimeError("ThoughtGraph exceeded configured node limit")
 
     async def add_thought(self, thought: Thought | dict[str, Any]) -> str:
@@ -36,6 +37,7 @@ class ThoughtGraph:
 
         self._check_limits()
         self._graph.add_node(thought.id, thought=thought)
+        self.thoughts[thought.id] = thought
 
         if thought.parent:
             self._graph.add_edge(thought.parent, thought.id)

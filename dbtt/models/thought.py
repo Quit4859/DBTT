@@ -11,6 +11,25 @@ from typing import Any
 from pydantic import BaseModel, Field
 
 
+class ThoughtGraphInterface:
+    """Interface for ThoughtGraph implementations."""
+
+    def add_thought(self, thought: 'Thought') -> None:
+        pass
+
+    def get_thought(self, thought_id: str) -> 'Thought':
+        pass
+
+    def get_root_thoughts(self) -> list['Thought']:
+        pass
+
+    def to_dict(self) -> dict[str, Any]:
+        pass
+
+    def from_dict(self, data: dict[str, Any]) -> None:
+        pass
+
+
 class Thought(BaseModel):
     """A structured thought node."""
 
